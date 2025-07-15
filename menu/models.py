@@ -18,11 +18,11 @@ class MenuItem(models.Model):
     
 class Order(models.Model):
     STATUS_CHOICES = [
-        ('pending', '注文受付'),
-        ('processing', '調理中'),
-        ('ready', '準備完了'),
-        ('completed', '受け渡し完了'),
-        ('canceled', 'キャンセル')
+        ('pending', 'Order Received'),
+        ('processing', 'In Preparation'),
+        ('ready', 'Ready for Pickup'),
+        ('completed', 'Completed'),
+        ('canceled', 'Canceled')
     ]
     order_number = models.CharField(max_length=20, unique=True, null=True, blank=True)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='pending')
@@ -31,7 +31,7 @@ class Order(models.Model):
     total_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     
     def __str__(self):
-        return f"注文 #{self.order_number}"
+        return f"Order #{self.order_number}"
     
     def save(self, *args, **kwargs):
         if not self.order_number:

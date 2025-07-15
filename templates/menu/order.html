@@ -1,7 +1,7 @@
 <!-- menu/templates/menu/order.html -->
-<h1>注文ページ</h1>
+<h1>Order Page</h1>
 <form method="post">
   {% csrf_token %}
   {{ form.as_p }}
-  <button type="submit">注文する</button>
+  <button type="submit">Place Order</button>
 </form>
