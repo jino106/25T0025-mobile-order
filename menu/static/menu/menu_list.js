@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('メニューJSが読み込まれました');
+    console.log('Menu JS loaded');
     
     // メニュー項目の取得
     const menuItems = document.querySelectorAll('.menu-item');
@@ -100,12 +100,12 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // 注文処理
     orderButton.addEventListener('click', function() {
-        console.log('注文ボタンがクリックされました');
-        console.log('現在のカート:', cart);
+        console.log('Order button clicked');
+        console.log('Current cart:', cart);
         
         if (cart.length === 0) {
-            console.log('カートが空のため注文をキャンセルします');
-            alert('カートに商品がありません');
+            console.log('Order cancelled because cart is empty');
+            alert('Your cart is empty');
             return;
         }
         
@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }));
         
         const orderData = { cart_items: cartItems };
-        console.log('注文データ:', orderData);
+        console.log('Order data:', orderData);
         
         fetch('/menu/place-order/', {
             method: 'POST',
@@ -127,19 +127,19 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('レスポンスデータ:', data);
+            console.log('Response data:', data);
             if (data.success) {
-                alert(`ご注文ありがとうございます！注文番号: ${data.order_number}`);
+                alert(`Thank you for your order! Order number: ${data.order_number}`);
                 cart = [];
                 updateCart();
                 cartPopup.style.display = 'none';
             } else {
-                alert('注文処理中にエラーが発生しました: ' + data.error);
+                alert('An error occurred while processing your order: ' + data.error);
             }
         })
         .catch(error => {
-            console.error('エラー:', error);
-            alert('注文処理中にエラーが発生しました');
+            console.error('Error:', error);
+            alert('An error occurred while processing your order');
         });
     });
     

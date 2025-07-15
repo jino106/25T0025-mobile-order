@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>メニュー一覧</title>
+    <title>Menu List</title>
     <style>
         body {
             font-family: sans-serif;
@@ -129,8 +129,8 @@
     </style>
 </head>
 <body>
-    <button class="cart-button">カートを見る</button>
-    <h1>メニュー一覧</h1>
+    <button class="cart-button">View Cart</button>
+    <h1>Menu List</h1>
     <div class="menu-grid">
         {% for item in items %}
         <div class="menu-item" data-id="{{ item.id }}" data-name="{{ item.name }}" data-price="{{ item.price }}">
@@ -138,7 +138,7 @@
                 <img src="{{ item.image.url }}" alt="{{ item.name }}">
             {% endif %}
             <h3>{{ item.name }}</h3>
-            <p class="price">¥{{ item.price }}</p>
+            <p class="price">¥{{ item.price|floatformat:0 }}</p>
             <p>{{ item.description }}</p>
         </div>
         {% endfor %}
@@ -148,24 +148,24 @@
     <div class="popup-overlay"></div>
     <div class="popup">
         <h2 id="popup-item-name"></h2>
-        <p>価格: ¥<span id="popup-item-price"></span></p>
-        <label for="quantity">注文数:</label>
+        <p>Price: ¥<span id="popup-item-price"></span></p>
+        <label for="quantity">Quantity:</label>
         <input type="number" id="quantity" value="1" min="1">
-        <p>合計: ¥<span id="total-price"></span></p>
+        <p>Total: ¥<span id="total-price"></span></p>
         <div class="popup-buttons">
-            <button class="cancel">キャンセル</button>
-            <button class="add-to-cart">カートに追加</button>
+            <button class="cancel">Cancel</button>
+            <button class="add-to-cart">Add to Cart</button>
         </div>
     </div>
 
     <!-- カートポップアップ -->
     <div class="cart-popup">
-        <h2>カートの中身</h2>
+        <h2>Cart Items</h2>
         <ul id="cart-items"></ul>
-        <p class="total">合計金額: ¥<span id="cart-total"></span></p>
+        <p class="total">Total Amount: ¥<span id="cart-total"></span></p>
         <div class="cart-popup-buttons">
-            <button class="close">閉じる</button>
-            <button class="order">注文する</button>
+            <button class="close">Close</button>
+            <button class="order">Place Order</button>
         </div>
     </div>
     
@@ -173,7 +173,7 @@
     <script src="{% static 'menu/menu_list.js' %}?v={% now 'U' %}" defer></script>
     <script>
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('インラインスクリプトが実行されました');
+    console.log('Inline script executed');
     // 注文ボタンを直接取得
     const orderButton = document.querySelector('.cart-popup-buttons .order');
     
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const newOrderButton = document.querySelector('.cart-popup-buttons .order');
         
         newOrderButton.addEventListener('click', function() {
-            console.log('新しいイベントハンドラが実行されました');
+            console.log('New event handler executed');
         });
     }
 });

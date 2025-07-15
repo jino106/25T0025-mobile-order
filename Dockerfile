@@ -12,10 +12,14 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
+# 依存パッケージをインストールß
+RUN pip install psycopg2-binary
+
+
 # プロジェクトファイルをコピー
 COPY . .
 
-# コレクトスタティック（本番環境用）
+# コレクトスタティック（本番環境用）ß
 # RUN python manage.py collectstatic --noinput
 
 # コンテナ起動時のコマンド
