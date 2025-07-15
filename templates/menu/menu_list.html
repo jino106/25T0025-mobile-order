@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>メニュー一覧</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            padding: 20px;
+        }
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .menu-item {
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            text-align: center;
+            cursor: pointer;
+        }
+        .menu-item img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+        }
+        .price {
+            color: #e91e63;
+            font-weight: bold;
+        }
+        /* ポップアップのスタイル */
+        .popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            padding: 20px;
+            z-index: 1000;
+            width: 300px;
+        }
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
+        .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .popup-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .popup-buttons .cancel {
+            background: #f44336;
+            color: white;
+        }
+        .popup-buttons .add-to-cart {
+            background: #4caf50;
+            color: white;
+        }
+        /* カートボタンのスタイル */
+        .cart-button {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        /* カートポップアップのスタイル */
+        .cart-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            padding: 20px;
+            z-index: 1000;
+            width: 400px;
+        }
+        .cart-popup .total {
+            margin-top: 20px;
+            font-weight: bold;
+            text-align: right;
+        }
+        .cart-popup-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .cart-popup-buttons button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .cart-popup-buttons .close {
+            background: #f44336;
+            color: white;
+        }
+        .cart-popup-buttons .order {
+            background: #4caf50;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <button class="cart-button">カートを見る</button>
+    <h1>メニュー一覧</h1>
+    <div class="menu-grid">
+        {% for item in items %}
+        <div class="menu-item" data-id="{{ item.id }}" data-name="{{ item.name }}" data-price="{{ item.price }}">
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}">
+            {% endif %}
+            <h3>{{ item.name }}</h3>
+            <p class="price">¥{{ item.price }}</p>
+            <p>{{ item.description }}</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- ポップアップ -->
+    <div class="popup-overlay"></div>
+    <div class="popup">
+        <h2 id="popup-item-name"></h2>
+        <p>価格: ¥<span id="popup-item-price"></span></p>
+        <label for="quantity">注文数:</label>
+        <input type="number" id="quantity" value="1" min="1">
+        <p>合計: ¥<span id="total-price"></span></p>
+        <div class="popup-buttons">
+            <button class="cancel">キャンセル</button>
+            <button class="add-to-cart">カートに追加</button>
+        </div>
+    </div>
+
+    <!-- カートポップアップ -->
+    <div class="cart-popup">
+        <h2>カートの中身</h2>
+        <ul id="cart-items"></ul>
+        <p class="total">合計金額: ¥<span id="cart-total"></span></p>
+        <div class="cart-popup-buttons">
+            <button class="close">閉じる</button>
+            <button class="order">注文する</button>
+        </div>
+    </div>
+    
+    {% load static %}
+    <script src="{% static 'menu/menu_list.js' %}?v={% now 'U' %}" defer></script>
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('インラインスクリプトが実行されました');
+    // 注文ボタンを直接取得
+    const orderButton = document.querySelector('.cart-popup-buttons .order');
+    
+    // 注文ボタンのイベントを上書き
+    if (orderButton) {
+        // 既存のイベントリスナーを削除
+        orderButton.replaceWith(orderButton.cloneNode(true));
+        const newOrderButton = document.querySelector('.cart-popup-buttons .order');
+        
+        newOrderButton.addEventListener('click', function() {
+            console.log('新しいイベントハンドラが実行されました');
+        });
+    }
+});
+</script>
+
+</body>
+</html>
