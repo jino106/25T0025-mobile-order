@@ -84,27 +84,55 @@ document.addEventListener('DOMContentLoaded', function() {
         cartPopup.style.display = 'none';
     });
     
-    // カート更新
+    // カート更新（新しいフォーマット）
     function updateCart() {
         cartItemsList.innerHTML = '';
         let total = 0;
-        cart.forEach(item => {
+        
+        cart.forEach((item, index) => {
             const li = document.createElement('li');
+            li.className = 'cart-item';
+            
             const itemTotal = item.price * item.quantity;
-            li.textContent = `${item.name} x ${item.quantity} = ¥${itemTotal.toFixed(0)}`;
-            cartItemsList.appendChild(li);
             total += itemTotal;
+            
+            // 商品情報の表示形式を変更
+            li.innerHTML = `
+                <div class="item-info">
+                    <span class="item-name">${item.name}</span>
+                    <span class="item-quantity">x${item.quantity}</span>
+                    <span class="item-price">¥${itemTotal.toFixed(0)}</span>
+                </div>
+                <button class="cancel-item-btn" data-index="${index}">Cancel</button>
+            `;
+            
+            cartItemsList.appendChild(li);
         });
+        
+        // カートが空の場合のメッセージ
+        if (cart.length === 0) {
+            const emptyMessage = document.createElement('li');
+            emptyMessage.textContent = 'Cart is empty';
+            emptyMessage.className = 'empty-cart';
+            cartItemsList.appendChild(emptyMessage);
+        }
+        
         cartTotalElement.textContent = total.toFixed(0);
+        
+        // アイテム削除ボタンにイベントリスナーを追加
+        const cancelButtons = document.querySelectorAll('.cancel-item-btn');
+        cancelButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const index = parseInt(this.getAttribute('data-index'));
+                cart.splice(index, 1);
+                updateCart();
+            });
+        });
     }
     
     // 注文処理
     orderButton.addEventListener('click', function() {
-        console.log('Order button clicked');
-        console.log('Current cart:', cart);
-        
         if (cart.length === 0) {
-            console.log('Order cancelled because cart is empty');
             alert('Your cart is empty');
             return;
         }
@@ -115,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }));
         
         const orderData = { cart_items: cartItems };
-        console.log('Order data:', orderData);
         
         fetch('/menu/place-order/', {
             method: 'POST',
@@ -127,7 +154,6 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            console.log('Response data:', data);
             if (data.success) {
                 alert(`Thank you for your order! Order number: ${data.order_number}`);
                 cart = [];
@@ -143,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
     
-    // CSRFトークン取得
+    // CSRFトークン取得関数
     function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -158,10 +184,4 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         return cookieValue;
     }
-    
-    // デバッグ用コード - 要素の存在確認
-    console.log('menuItems:', document.querySelectorAll('.menu-item'));
-    console.log('popup:', document.querySelector('.popup'));
-    console.log('cartButton:', document.querySelector('.cart-button'));
-    console.log('orderButton:', document.querySelector('.cart-popup-buttons .order'));
 });

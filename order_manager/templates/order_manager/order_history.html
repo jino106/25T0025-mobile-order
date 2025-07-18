@@ -57,7 +57,7 @@
             {% for order in orders %}
             <tr class="order-row {% if order.status == 'completed' %}completed{% endif %}">
                 <td>{{ order.order_number }}</td>
-                <td>{{ order.created_at|date:"H:i:s" }}</td>
+                <td>{{ order.created_at|date:"H:i" }}</td>
                 <td class="status status-{{ order.status }}">{{ order.get_status_display }}</td>
                 <td>
                     <ul class="item-list">
