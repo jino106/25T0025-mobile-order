@@ -76,12 +76,14 @@ document.addEventListener('DOMContentLoaded', function() {
     // カート表示
     cartButton.addEventListener('click', function() {
         cartPopup.style.display = 'block';
+        popupOverlay.style.display = 'block'; // オーバーレイを表示
         updateCart();
     });
     
     // カートを閉じる
     closeCartButton.addEventListener('click', function() {
         cartPopup.style.display = 'none';
+        popupOverlay.style.display = 'none'; // オーバーレイを非表示
     });
     
     // カート更新（新しいフォーマット）
@@ -159,6 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 cart = [];
                 updateCart();
                 cartPopup.style.display = 'none';
+                popupOverlay.style.display = 'none'; // オーバーレイを非表示
             } else {
                 alert('An error occurred while processing your order: ' + data.error);
             }
